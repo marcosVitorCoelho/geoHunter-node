@@ -1,17 +1,17 @@
 import asyncHandler from 'express-async-handler'
-import RegularUser, { RegularUserInterface } from '../model/RegularUserModel';
 import { Request, Response } from 'express';
 import bcrypt from "bcrypt";
 import { generateRefreshToken, generateToken } from '../config/jwt';
+import ProUser, {ProUserInterface} from '../model/ProUserModel';
 
 
-const createRegularUser = asyncHandler(async (req: Request, res: Response) => {
-    const { firstName, lastName, email, password, address, birthDate, profileImageUrl, rg, cpf, phoneNumber } = req.body as RegularUserInterface;
+const createProUser = asyncHandler(async (req: Request, res: Response) => {
+    const { firstName, lastName, email, password, address, birthDate, profileImageUrl, rg, cpf, phoneNumber, role } = req.body as ProUserInterface;
     try{
-        const findByEmail = await RegularUser.findOne({ email })
+        const findByEmail = await ProUser.findOne({ email })
         if (!findByEmail) {
             const hashedPassword = await bcrypt.hash(password, 15)
-            const newRegularUser = new RegularUser({
+            const newProUser = new ProUser({
                 firstName,
                 lastName,
                 email,
@@ -21,10 +21,11 @@ const createRegularUser = asyncHandler(async (req: Request, res: Response) => {
                 profileImageUrl,
                 phoneNumber,
                 rg, 
-                cpf
+                cpf,
+                role
             })
-            const savedRegularUser = await newRegularUser.save()
-            res.status(201).json({success: true, data: savedRegularUser})
+            const savedProUser = await newProUser.save()
+            res.status(201).json({success: true, data: savedProUser})
         }
     res.status(400).json({success: false, data: "Usuário já cadastrado"})
     }catch(ex: any){
@@ -32,14 +33,14 @@ const createRegularUser = asyncHandler(async (req: Request, res: Response) => {
     }
 })
 
-const loginUser = asyncHandler(async (req: Request, res: Response) => {
+const loginProUser = asyncHandler(async (req: Request, res: Response) => {
   const { email, password } = req.body;
-  const findUser = await RegularUser.findOne({ email });
+  const findUser = await ProUser.findOne({ email });
   console.log(findUser)
 
   if (findUser && await bcrypt.compare(password, findUser.password)) {
     const refreshToken = generateRefreshToken(findUser._id)
-    await RegularUser.findByIdAndUpdate(
+    await ProUser.findByIdAndUpdate(
       findUser._id,
       {
         refreshToken: refreshToken,
@@ -58,17 +59,17 @@ const loginUser = asyncHandler(async (req: Request, res: Response) => {
   }
 });
 
-const getOneRegularUser = asyncHandler(async (req: Request, res: Response) => {
+const getOneProUser = asyncHandler(async (req: Request, res: Response) => {
     const { id } = req.body;
-    const findById = await RegularUser.findOne({ id })
+    const findById = await ProUser.findOne({ id })
     if (!findById) {
         res.status(400).json({success: false, data: "Usuário não cadastrado"})
     }
     res.status(200).json({success: true, data: findById})
 })
 
-const getAllRegularUser = asyncHandler(async (req: Request, res: Response) => {
-    const findAll = await RegularUser.find()
+const getAllProUser = asyncHandler(async (req: Request, res: Response) => {
+    const findAll = await ProUser.find()
 
     if (!findAll || findAll.length === 0) {
         res.status(400).json({success: false, data: "Usuários não cadastrados"})
@@ -76,11 +77,11 @@ const getAllRegularUser = asyncHandler(async (req: Request, res: Response) => {
     res.status(200).json({success: true, data: findAll})
 })
 
-const updateOneRegularUser = asyncHandler(async (req: Request, res: Response) => {
+const updateOneProUser = asyncHandler(async (req: Request, res: Response) => {
     const { id } = req.params
     const { firstName, lastName, email, password, address, birthDate, profileImageUrl } = req.body;
     try {
-        const updatedUser = await RegularUser.findByIdAndUpdate(id, {
+        const updatedUser = await ProUser.findByIdAndUpdate(id, {
             firstName,
             lastName,
             email,
@@ -97,10 +98,10 @@ const updateOneRegularUser = asyncHandler(async (req: Request, res: Response) =>
     }
 })
 
-const DeleteOneRegularUser = asyncHandler(async (req: Request, res: Response) => {
+const DeleteOneProUser = asyncHandler(async (req: Request, res: Response) => {
     const { id } = req.params
     try {
-        await RegularUser.findByIdAndDelete(id)
+        await ProUser.findByIdAndDelete(id)
         res.status(200).json({success: true, data: "Usuário deletado"})
     } catch (err) {
         console.error(err)
@@ -111,10 +112,10 @@ const DeleteOneRegularUser = asyncHandler(async (req: Request, res: Response) =>
 
 
 export {
-    createRegularUser,
-    loginUser,
-    getOneRegularUser,
-    getAllRegularUser,
-    updateOneRegularUser,
-    DeleteOneRegularUser
+    createProUser,
+    loginProUser,
+    getOneProUser,
+    getAllProUser,
+    updateOneProUser,
+    DeleteOneProUser
 }

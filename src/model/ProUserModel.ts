@@ -1,12 +1,14 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-export interface RegularUserInterface extends Document {
+export interface ProUserInterface extends Document {
     firstName: string;
     lastName: string;
     rg: string;
     cpf: string;
     phoneNumber: string;
     email: string;
+    role: Schema.Types.ObjectId;
+    rating: number;
     address: {
         street: string;
         city: string;
@@ -21,7 +23,7 @@ export interface RegularUserInterface extends Document {
     profileImageUrl: string;
 }
 
-const RegularUserSchema = new Schema<RegularUserInterface>(
+const ProUserSchema = new Schema<ProUserInterface>(
     {
         firstName: { type: "string", required: true },
         lastName: { type: "string", required: true },
@@ -30,6 +32,8 @@ const RegularUserSchema = new Schema<RegularUserInterface>(
         rg: {type: "string", required: true},
         phoneNumber: {type: "string", required: true},
         password: { type: "string", required: true },
+        role: { type: Schema.Types.ObjectId, ref: 'Role', required: true},
+        rating: {type: "number"},
         address: {
             street: { type: "string", required: true},
             city: { type: "string", required: true},
@@ -41,10 +45,10 @@ const RegularUserSchema = new Schema<RegularUserInterface>(
 
         },
         birthDate: { type: "Date", required: true },
-        profileImageUrl: { type: "string", required: true },
+        profileImageUrl: { type: "string"},
     },
     { timestamps: true }
 )
 
-export default mongoose.model<RegularUserInterface>("RegularUser", RegularUserSchema);
+export default mongoose.model<ProUserInterface>("ProUser", ProUserSchema);
 
