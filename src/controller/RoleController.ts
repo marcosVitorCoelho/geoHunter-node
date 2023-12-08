@@ -1,22 +1,22 @@
 import asyncHandler from 'express-async-handler'
 import { Request, Response } from 'express';
-import Role ,{ RoleInterface } from '../model/roleModel';
+import Role, { RoleInterface } from '../model/roleModel';
 
 const createRole = asyncHandler(async (req: Request, res: Response) => {
-    const { title, description } = req.body as RoleInterface;
-    try{
-        const findByEmail = await Role.findOne({ title })
-        if (!findByEmail) {
-            const newRole = new Role({
-                title, description
-            })
-            const savedRole = await newRole.save()
-            res.status(201).json({success: true, data: savedRole})
-        }
-    res.status(400).json({success: false, data: "Categoria já cadastrada"})
-    }catch(ex: any){
-        throw ex;
+  const { title, description } = req.body as RoleInterface;
+  try {
+    const findByEmail = await Role.findOne({ title })
+    if (!findByEmail) {
+      const newRole = new Role({
+        title, description
+      })
+      const savedRole = await newRole.save()
+      res.status(201).json({ success: true, data: savedRole })
     }
+    res.status(400).json({ success: false, data: "Categoria já cadastrada" })
+  } catch (ex: any) {
+    throw ex;
+  }
 })
 
 const getOneRole = asyncHandler(async (req: Request, res: Response) => {

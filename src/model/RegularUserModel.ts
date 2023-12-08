@@ -13,12 +13,10 @@ export interface RegularUserInterface extends Document {
         state: string;
         number: string;
         zipCode: string;
-        latitud: string;
-        longitud: string;
     };
     password: string;
-    birthDate: Date;
-    profileImageUrl: string;
+    birthDate: string;
+    type: string;
 }
 
 const RegularUserSchema = new Schema<RegularUserInterface>(
@@ -26,22 +24,19 @@ const RegularUserSchema = new Schema<RegularUserInterface>(
         firstName: { type: "string", required: true },
         lastName: { type: "string", required: true },
         email: { type: "string", required: true },
-        cpf: {type: "string", required: true},
-        rg: {type: "string", required: true},
-        phoneNumber: {type: "string", required: true},
+        cpf: { type: "string", required: true },
+        rg: { type: "string", required: true },
+        phoneNumber: { type: "string", required: true },
         password: { type: "string", required: true },
         address: {
-            street: { type: "string", required: true},
-            city: { type: "string", required: true},
-            state: { type: "string", required: true},
-            number: { type: "string", required: true},
-            zipCode: { type: "string", required: true},
-            latitud: { type: "string", required: true},
-            longitud: { type: "string", required: true}
-
+            street: { type: "string", required: true },
+            city: { type: "string", required: true },
+            state: { type: "string", required: true },
+            number: { type: "string", required: true },
+            zipCode: { type: "string", required: true },
         },
-        birthDate: { type: "Date", required: true },
-        profileImageUrl: { type: "string", required: true },
+        birthDate: { type: "string", required: true },
+        type: { type: "string", required: true },
     },
     { timestamps: true }
 )

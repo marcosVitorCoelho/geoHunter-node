@@ -5,12 +5,12 @@ import jwt from "jsonwebtoken";
 export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     const authorizationHeader = req.header("Authorization")
 
-    if (!authorizationHeader || !authorizationHeader.startsWith("Bearer ")) {
+    if (!authorizationHeader || !authorizationHeader.startsWith("bearer ")) {
         return res.status(401).json({ success: false, message: "Invalid authorization header" });
     }
 
     const token = authorizationHeader.replace("Bearer ", "")
-     if (!token) {
+    if (!token) {
         return res.status(401).json({ success: false, message: "Authorization token not found" });
     }
     try {
@@ -20,5 +20,5 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
     } catch (err) {
         console.error(err);
         return res.status(401).json({ success: false, message: "Invalid token" });
-    }   
+    }
 };

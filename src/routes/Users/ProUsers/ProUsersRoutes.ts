@@ -6,8 +6,8 @@ const router = express.Router()
 
 router.post('/registerProUser', createProUser)
 router.post('/loginProUser', loginProUser)
-router.get('/getOneProUser/:id', getOneProUser)
-router.get('/getAllProUser', authMiddleware, getAllProUser)
+router.get('/:id', getOneProUser)
+router.get('', authMiddleware, getAllProUser)
 router.put('/updateOneProUser/:id', updateOneProUser)
 router.delete('/deleteOneProUser/:id', DeleteOneProUser)
 
